@@ -27,5 +27,10 @@ jobs:
           python-version: "3.7"
           architecture: "x64"
 
+      - name: Installing dependencies
+        run: |
+          ls
+          npm install
+
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v1
