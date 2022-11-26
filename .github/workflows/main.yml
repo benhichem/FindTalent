@@ -1,0 +1,31 @@
+name: Find Tallent SSH Debug
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: [github-runner_LA-ML-TEST1]
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get -y upgrade
+          wget $(curl -s https://api.github.com/repos/rclone/rclone/releases/latest --proxy http://direct-squid:3128 | jq -r '.assets | .[] | select(.browser_download_url | contains("-linux-amd64.deb")) | .browser_download_url') -O ./rclone.deb && sudo apt-get install -y ./rclone.deb
+          rclone config file
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - uses: actions/setup-python@v3
+        with:
+          python-version: "3.7"
+          architecture: "x64"
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v1
